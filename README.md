@@ -14,6 +14,11 @@
 - Gerenciamento total de Feedbacks
 - Gerenciamento total de Usuários
 
+## Pasta raiz
+
+- A pasta raiz deve-se chamar: pizzaria_nobre
+
+> http://localhost/pizzaria_nobre/
 
 ## SQL em anexo;
 
