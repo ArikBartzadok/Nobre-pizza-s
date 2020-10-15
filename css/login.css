@@ -4,8 +4,8 @@
   }
   
   body {
-    background: #ffffff;
-    background: linear-gradient(to right, rgb(253, 253, 253), rgb(255, 255, 255));
+    background: #000000;
+    background: linear-gradient(to right, rgb(0, 0, 0), rgb(0, 0, 0));
   }
   
   .login{

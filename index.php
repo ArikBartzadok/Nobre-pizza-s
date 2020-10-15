@@ -1,3 +1,9 @@
+<?php 
+include_once('controller/connect.php');
+session_name(md5('seg'.$_SERVER['REMOTE_ADDR'].$_SERVER['HTTP_USER_AGENT']));
+session_start();
+?>
+	
 	<!DOCTYPE html>
 	<html lang="pt-br" class="no-js">
 	<head>
@@ -8,13 +14,13 @@
 		<!-- Author Meta -->
 		<meta name="author" content="etec206">
 		<!-- Meta Description -->
-		<meta name="description" content="pizzaria nobre web page">
+		<meta name="description" content="pizzaria Casa Nova web page">
 		<!-- Meta Keyword -->
-		<meta name="keywords" content="nobre, pizzaria, comida, promoção">
+		<meta name="keywords" content="Casa Nova, pizzaria, comida, promoção">
 		<!-- meta character set -->
 		<meta charset="UTF-8">
 		<!-- Site Title -->
-		<title>Nobre</title>
+		<title>Casa Nova</title>
 
 		<link href="https://fonts.googleapis.com/css?family=Poppins:100,200,400,300,500,600,700" rel="stylesheet"> 
 			<!--
@@ -35,22 +41,30 @@
 			    <div class="container">
 			    	<div class="row align-items-center justify-content-between d-flex">
 				      <div id="logo">
-				        <a href="index.html"><img src="img/logo-2.png" alt="" title="" style="height: 20px;" /></a>
+				        <a href="index.php"><img src="img/logo-2.png" alt="" title="" style="height: 20px;" /></a>
 				      </div>
 				      <nav id="nav-menu-container">
 				        <ul class="nav-menu">
 						  <li class="menu-active"><a href="#home">Home</a></li>
-						  <li><a href="#">Produtos</a></li>
+						  <li><a href="produtos.php">Produtos</a></li>
 				          <li><a href="#about">Saiba +</a></li>
 				          <li><a href="#different">Diferenciais</a></li>
 						  <li><a href="#filiais">Filiais</a></li>
 						  <li><a href="#produtcs">Destaques</a></li>
 				          <li><a href="#review">Review</a></li>
 				          <li><a href="#faq">FAQ</a></li>
-				          <li class="menu-has-children"><a href="">Login</a>
-				            <ul>
-				              <li><a href="login.html">Login</a></li>
-							  <li><a href="signup.html">Sign-up</a></li>
+				          <?php 
+							          if((!isset ($_SESSION['email']) == true) and (!isset ($_SESSION['pass']) == true)){
+								          echo '<li class="menu-has-children"><a href="">Login</a><ul><li><a href="login.php">Login</a></li><li><a href="signup.php">Sign-up</a></li>';
+                        }
+                        else if($_SESSION['rank'] == 0) {
+                          echo '<li class="menu-has-children"><a href="">Perfil</a><ul><li><a href="user.php">Perfil</a></li><li><a href="feedback.php">Feedback</a></li><li><a href="controller/logout.php">Sair</a></li>';
+                        }
+                        else if($_SESSION['rank'] == 1) {
+                          echo '<li class="menu-has-children"><a href="">ADM</a><ul><li><a href="admin.php">Painel</a></li><li><a href="admin-perfil.php">Perfil</a></li><li><a href="feedback.php">Feedback</a></li><li><a href="controller/logout.php">Sair</a></li>';
+                        }
+
+                        ?>
 							  
 							  <!-- if com página de adm -->
 
@@ -70,14 +84,14 @@
 						<div class="banner-content col-lg-10">
 							<br />							
 							<h1>
-								Pizzaria Nobre				
+								Pizzaria Casa Nova				
 							</h1>
 							<br />
 							<br />
 							<h5 class="text-white text-uppercase">A melhor da região!</h5>
 							<br />
 							<br />
-							<a href="#" class="primary-btn text-uppercase e-large">Comprar agora</a>
+							<a href="produtos.php" class="primary-btn text-uppercase e-large">Comprar agora</a>													
 						</div>											
 					</div>
 				</div>
@@ -157,30 +171,7 @@
 					</div>
 				</div>	
 			</section>
-			<!-- End top-course Area -->
-			
-			<!-- Start home-about Area -->
-			<section class="home-about-area" id="filiais">
-				<div class="container-fluid">				
-					<div class="row justify-content-center align-items-center">
-						<div class="col-lg-6 no-padding home-about-left">
-							<img class="img-fluid" src="img/ambiente.png" alt="">
-						</div>
-						<div class="col-lg-6 no-padding home-about-right">
-							<h1>Filiais distribuídas <br>
-								por todo o Brasil</h1>
-							<p>
-								<span>Executamos nossa missão com excelência!</span>
-							</p>
-							<p>
-								Conheça alguns de nossos pontos de venda
-							</p>
-							<a class="text-uppercase primary-btn" href="#">Visualizar</a>
-						</div>
-					</div>
-				</div>	
-			</section>
-			<!-- End home-about Area -->			
+			<!-- End top-course Area -->					
 
 			<!-- Start unique-feature Area -->
 			<section class="unique-feature-area section-gap" id="produtcs">
@@ -188,60 +179,39 @@
 					<div class="row d-flex justify-content-center">
 						<div class="menu-content pb-60 col-lg-10">
 							<div class="title text-center">
-								<h1 class="mb-10 text-white">Nossos principais produtos</h1>
-								<p>Aqueles que vocẽ precisa conhecer!</p>
+								<h1 class="mb-10 text-white">Nossos principais produtos</h1>                
+                <h5 class="text-white text-uppercase">Aqueles que você precisa conhecer!</h5>
 							</div>
 						</div>
 					</div>						
 					<div class="row">
+          <?php
+					$sql = "SELECT * FROM produto";
+            		$res = mysqli_query($con, $sql);
+            
+            		//Captura o número de linhas retornadas do banco
+            		$num = mysqli_num_rows($res);
+            
+            		//Transforma o $resultado em um array
+            		$array = mysqli_fetch_assoc($res); 
+
+            		//Exibe os dados
+					do {
+				?>
 						<div class="col-lg-3 col-md-6">
 							<div class="single-unique-product">
-								<img class="img-fluid" src="img/products/pizza4.png" alt="">
+								<img class="img-fluid" src="img/products/<?= $array['imagem']; ?>" alt="">
 								<div class="desc">
 									<h4>
-										Pizza 1
+                  <?= $array['nome'];?>
 									</h4>
-									<h6>R$ 39.00</h6>
+                  <h6>R$ <?= $array['preco'];?></h6>
+                  <p><?= $array['descricao'];?></p>
 									<a class="text-uppercase primary-btn" href="#">Comprar</a>
 								</div>
 							</div>
-						</div>
-						<div class="col-lg-3 col-md-6">
-							<div class="single-unique-product">
-								<img class="img-fluid" src="img/products/pizza4.png" alt="">
-								<div class="desc">
-									<h4>
-										Pizza 1
-									</h4>
-									<h6>R$ 39.00</h6>
-									<a class="text-uppercase primary-btn" href="#">Comprar</a>
-								</div>
-							</div>
-						</div>
-						<div class="col-lg-3 col-md-6">
-							<div class="single-unique-product">
-								<img class="img-fluid" src="img/products/pizza4.png" alt="">
-								<div class="desc">
-									<h4>
-										Pizza 1
-									</h4>
-									<h6>R$ 39.00</h6>
-									<a class="text-uppercase primary-btn" href="#">Comprar</a>
-								</div>
-							</div>
-						</div>
-						<div class="col-lg-3 col-md-6">
-							<div class="single-unique-product">
-								<img class="img-fluid" src="img/products/pizza4.png" alt="">
-								<div class="desc">
-									<h4>
-										Pizza 1
-									</h4>
-									<h6>R$ 39.00</h6>
-									<a class="text-uppercase primary-btn" href="#">Comprar</a>
-								</div>
-							</div>
-						</div>																		
+            </div>
+            <?php } while($array = mysqli_fetch_assoc($res))?>																								
 					</div>
 				</div>	
 			</section>
@@ -259,100 +229,78 @@
 						</div>
 					</div>						
 					<div class="row">
+					<?php
+					$sql = "SELECT * FROM comentario";
+            		$res = mysqli_query($con, $sql);
+            
+            		//Captura o número de linhas retornadas do banco
+            		$num = mysqli_num_rows($res);
+            
+            		//Transforma o $resultado em um array
+            		$array = mysqli_fetch_assoc($res); 
+
+            		//Exibe os dados
+					do {
+				?>
 						<div class="col-lg-4 col-md-6">
 							<div class="single-review">
-								<h4>pessoa 1</h4>
+								<h4><?= $array['nome_cliente'];?></h4>
 								<p>
-									lorem ipsum dolor sit...
+								<?= $array['texto'];?>
 								</p>
 								<div class="star">
-									<span class="fa fa-star checked"></span>
-									<span class="fa fa-star checked"></span>
-									<span class="fa fa-star checked"></span>
-									<span class="fa fa-star"></span>
-									<span class="fa fa-star"></span>
+								<?php 
+								
+								if($array['nota'] == 1){
+									echo '<span class="fa fa-star checked"></span><span class="fa fa-star"></span><span class="fa fa-star"></span><span class="fa fa-star"></span><span class="fa fa-star"></span>';
+								}
+
+								if($array['nota'] == 2){
+									echo '<span class="fa fa-star checked"></span><span class="fa fa-star checked"></span><span class="fa fa-star"></span><span class="fa fa-star"></span><span class="fa fa-star"></span>';
+								}
+
+								if($array['nota'] == 3){
+									echo '<span class="fa fa-star checked"></span><span class="fa fa-star checked"></span><span class="fa fa-star checked"></span><span class="fa fa-star"></span><span class="fa fa-star"></span>';
+								}
+
+								if($array['nota'] == 4){
+									echo '<span class="fa fa-star checked"></span><span class="fa fa-star checked"></span><span class="fa fa-star checked"></span><span class="fa fa-star checked"></span><span class="fa fa-star"></span>';
+								}
+
+								if($array['nota'] == 5){
+									echo '<span class="fa fa-star checked"></span><span class="fa fa-star checked"></span><span class="fa fa-star checked"></span><span class="fa fa-star checked"></span><span class="fa fa-star checked"></span>';
+								}
+
+								?>
+									
 								</div>
 							</div>
 						</div>
-						<div class="col-lg-4 col-md-6">
-							<div class="single-review">
-								<h4>Pessoa 2</h4>
-								<p>
-									lorem ipsum dolor sit...
-								</p>
-								<div class="star">
-									<span class="fa fa-star checked"></span>
-									<span class="fa fa-star checked"></span>
-									<span class="fa fa-star"></span>
-									<span class="fa fa-star"></span>
-									<span class="fa fa-star"></span>
-								</div>
-							</div>
-						</div>
-						<div class="col-lg-4 col-md-6">
-							<div class="single-review">
-								<h4>Pessoa 3</h4>
-								<p>
-									lorem ipsum dolor sit...
-								</p>
-								<div class="star">
-									<span class="fa fa-star checked"></span>
-									<span class="fa fa-star checked"></span>
-									<span class="fa fa-star"></span>
-									<span class="fa fa-star"></span>
-									<span class="fa fa-star"></span>
-								</div>
-							</div>
-						</div>
-						<div class="col-lg-4 col-md-6">
-							<div class="single-review">
-								<h4>Pessoa 4</h4>
-								<p>
-									lorem ipsum dolor sit...
-								</p>
-								<div class="star">
-									<span class="fa fa-star checked"></span>
-									<span class="fa fa-star checked"></span>
-									<span class="fa fa-star checked"></span>
-									<span class="fa fa-star"></span>
-									<span class="fa fa-star"></span>
-								</div>
-							</div>
-						</div>
-						<div class="col-lg-4 col-md-6">
-							<div class="single-review">
-								<h4>Pessoa 5</h4>
-								<p>
-									lorem ipsum dolor sit...
-								</p>
-								<div class="star">
-									<span class="fa fa-star checked"></span>
-									<span class="fa fa-star checked"></span>
-									<span class="fa fa-star checked"></span>
-									<span class="fa fa-star checked"></span>
-									<span class="fa fa-star"></span>
-								</div>
-							</div>
-						</div>
-						<div class="col-lg-4 col-md-6">
-							<div class="single-review">
-								<h4>Pessoa 6</h4>
-								<p>
-									lorem ipsum dolor sit...
-								</p>
-								<div class="star">
-									<span class="fa fa-star checked"></span>
-									<span class="fa fa-star checked"></span>
-									<span class="fa fa-star checked"></span>
-									<span class="fa fa-star checked"></span>
-									<span class="fa fa-star"></span>
-								</div>
-							</div>
-						</div>																
+
+				<?php } while($array = mysqli_fetch_assoc($res))?>													
+
 					</div>
 				</div>	
 			</section>
 			<!-- End review Area -->
+
+			<!-- Start home-about Area -->
+			<section class="home-about-area" id="filiais">
+			<div class="container">
+				<div class="row d-flex justify-content-center">
+					<div class="menu-content pb-60 col-lg-10">
+						<div class="title text-center">
+							<h1 class="mb-10">Filiais distribuídas por todo o Brasil</h1>
+							<p>Visite uma de nossas unidades!</p>
+						</div>
+					</div>
+				</div>
+				<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14760.55913991041!2d-46.93070720529248!3d-22.348350151851907!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x9a3c1f8c167a3ac1!2sEscola%20T%C3%A9cnica%20Estadual%20Euro%20Albino%20de%20Souza!5e0!3m2!1spt-BR!2sbr!4v1601858113306!5m2!1spt-BR!2sbr" width="100%" height="600" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
+				<br />																	
+				<br />																	
+			</div>
+			</section>
+			<!-- End home-about Area -->
 
 			<!-- Start faq Area -->
 			<section class="faq-area section-gap" id="faq">
