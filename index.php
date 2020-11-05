@@ -1,5 +1,6 @@
 <?php 
 include_once('controller/connect.php');
+include_once('controller/config.php');
 session_name(md5('seg'.$_SERVER['REMOTE_ADDR'].$_SERVER['HTTP_USER_AGENT']));
 session_start();
 ?>

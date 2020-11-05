@@ -18,7 +18,7 @@
                             <div class="" id="mc_embed_signup">
                                 <form target="_blank" novalidate="true" action="" method="get" class="form-inline">
                                     <input class="form-control" name="EMAIL" placeholder="Digite seu E-mail" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Enter Email '" required="" type="email">
-                                        <button class="click-btn btn btn-default"><i class="fa fa-long-arrow-right" aria-hidden="true"></i></button>
+                                        <a href="https://github.com/ArikBartzadok/Nobre-pizza-s"><button class="click-btn btn btn-default"><i class="fa fa-long-arrow-right" aria-hidden="true"></i></button></a>
                                         <div style="position: absolute; left: -5000px;">
                                             <input name="novidades" tabindex="-1" value="" type="text">
                                         </div>

@@ -1,4 +1,5 @@
 <?php
+include_once ('config.php');
 	//Define nome da sessão
 	session_name(md5('seg'.$_SERVER['REMOTE_ADDR'].$_SERVER['HTTP_USER_AGENT']));
 
@@ -12,6 +13,6 @@
         unset($_SESSION['pass']);
         unset($_SESSION['name']);
         unset($_SESSION['rank']);
-        header('location:http://localhost/pizzaria_nobre/index.php');
+        header('location:' . BASE . 'index.php');
     }
 ?>

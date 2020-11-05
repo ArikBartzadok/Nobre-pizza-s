@@ -1,9 +1,10 @@
 <?php 
 include_once('controller/connect.php');
 include_once('controller/session.php');
+include_once('controller/config.php');
 
 if($_SESSION['rank'] != 0) {
-	header('location:http://localhost/pizzaria_nobre/index.php');
+	header('location:' . BASE . 'index.php');
 }
 ?>
 

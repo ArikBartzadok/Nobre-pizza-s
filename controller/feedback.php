@@ -5,6 +5,7 @@ id_comentario	/id_cliente	/nome_cliente	/nota	/texto
 */
 include_once ('connect.php');
 include_once ('session.php');
+include_once ('config.php');
 
 $id_cliente = $_SESSION['id'];
 $nome_cliente = $_SESSION['name'];

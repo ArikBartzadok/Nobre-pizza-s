@@ -1,6 +1,7 @@
 <?php 
 include_once('controller/connect.php');
 //include_once('controller/session.php');
+include_once('controller/config.php');
 ?>
 
 <!DOCTYPE html>

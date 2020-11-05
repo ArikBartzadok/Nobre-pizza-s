@@ -1,5 +1,6 @@
 <?php
 include_once ('connect.php');
+include_once ('config.php');
 
 $name = filter_input(INPUT_POST, "name");
 $price = filter_input(INPUT_POST, "price");
